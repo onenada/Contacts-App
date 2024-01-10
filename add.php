@@ -1,3 +1,36 @@
+<?php
+
+// Si el servidor recibe un request de POST entrara en el siguiente bloque //
+// donde añadira los campos name y phone number //
+    if ($_SERVER["REQUEST_METHOD"]== "POST"){
+        $contact= [
+            "name"=> $_POST["name"],
+            "phone_number"=> $_POST["phone_number"],
+        ];
+
+        if (file_exists("contacts.json")) {
+            $contacts = json_decode(file_get_contents("contacts.json"), true);
+        }
+        // Si no lo hay deja el array vacio //
+        else{
+            $contacts = [];
+        }
+
+        // En php podemos usar la siguiente sintaxis para añadir un elemento e a un array //
+        // colocamos [] luego de la variable sin ningun indice //
+        $contacts[] = $contact;
+
+        // Con esta funcion json_enconde transformaremos nuestro parametro en este caso un array // 
+        // o un diccionario en un string con formato de json y file put contents lo guardara en un archivo //
+        file_put_contents("contacts.json", json_encode($contacts));
+
+        // De esta forma una vez agregado el contacto cambiaremos la cabecera del archivo php //
+        // para que nos redireccione nuevamente a index.php //
+        header("Location: index.php");
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +54,7 @@
 </head>
 <body>
     <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg bg-secondary-subtle">
+    <nav class="navbar navbar-expand-lg bg-secondary-subtle">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
             <img class="mr-2" src="Media/Static/Img/nadaWebLogo1.png">
@@ -33,10 +66,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            <a class="nav-link active" aria-current="page" href="index.php">Home</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="add.html">Add contact</a>
+            <a class="nav-link" href="add.php">Add contact</a>
             </li>
             <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -65,7 +98,7 @@
             <div class="card">
                 <div class="card-header">Add New Contact</div>
                 <div class="card-body">
-                <form>
+                <form method="POST" action="add.php">
                     <div class="mb-3 row">
                     <label for="name" class="col-md-4 col-form-label text-md-end">Name</label>
         

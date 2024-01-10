@@ -1,14 +1,15 @@
 <?php
 
 
-$contacts = [
-    ["name" => "Pablo", "phone_number" => "2312345"],
-    ["name" => "Pepe", "phone_number" => "2132139"],
-    ["name" => "Paco", "phone_number" => "2312345"],
-    ["name" => "Patricio", "phone_number" => "2312345"],
-    ["name" => "Alan", "phone_number" => "2312345"],
-    ["name" => "Rubi", "phone_number" => "2312345"]
-];
+// Si hay un archivo con el nombre "contacts.json" decodificamelo y //
+// traemelo como un array asociativo //
+if (file_exists("contacts.json")) {
+    $contacts = json_decode(file_get_contents("contacts.json"), true);
+}
+// Si no lo hay deja el array vacio //
+else{
+    $contacts = [];
+}
 
 
 ?>
@@ -38,54 +39,62 @@ $contacts = [
 </head>
 <body>
     <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg bg-secondary-subtle">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img class="mr-2" src="Media/Static/Img/nadaWebLogo1.png">
-            Contacts App
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="index.html">Home</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="add.html">Add contact</a>
-            </li>
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
+    <nav class="navbar navbar-expand-lg bg-secondary-subtle">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img class="mr-2" src="Media/Static/Img/nadaWebLogo1.png">
+                Contacts App
             </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="add.php">Add contact</a>
+                </li>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Dropdown
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+                </li>
             </ul>
-            </li>
-        </ul>
-        <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            </div>
         </div>
-    </div>
     </nav>
     <main>
         <!-- CONTACTS CONTAINER  -->
         <div class="container pt-4 p-3">
             <div class="row" >
 
-                <!-- Contact 1 -->
+                <!-- Contacts -->
+                <?php if (count($contacts) == 0): ?>
+                <div class="col-md-4 mx-auto">
+                    <div class="card card-body text-center">
+                        <p>No contacts saved</p>
+                        <a href="add.php">Add one!</a>
+                    </div>
+                </div>
+                <?php endif ?>
                 <?php foreach ($contacts as $contact): ?>
                     <div class="col-md-4 mb-3">
                         <div class="card text-center">
                             <div class="card-body">
                             <h3 class="card-title text-capitalize"><?= $contact["name"] ?></h3>
-                            <p class="m-2"><?- $contact["phone_number"] ?></p>
+                            <p class="m-2"><?= $contact["phone_number"] ?></p>
                             <a href="#" class="btn btn-secondary mb-2">Edit Contact</a>
                             <a href="#" class="btn btn-danger mb-2">Delete Contact</a>
                             </div>
