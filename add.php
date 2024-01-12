@@ -1,28 +1,14 @@
 <?php
+    require "db.php";
 
 // Si el servidor recibe un request de POST entrara en el siguiente bloque //
 // donde añadira los campos name y phone number //
     if ($_SERVER["REQUEST_METHOD"]== "POST"){
-        $contact= [
-            "name"=> $_POST["name"],
-            "phone_number"=> $_POST["phone_number"],
-        ];
+        $name = $_POST["name"];
+        $phoneNumber = $_POST["phone_number"];
 
-        if (file_exists("contacts.json")) {
-            $contacts = json_decode(file_get_contents("contacts.json"), true);
-        }
-        // Si no lo hay deja el array vacio //
-        else{
-            $contacts = [];
-        }
-
-        // En php podemos usar la siguiente sintaxis para añadir un elemento e a un array //
-        // colocamos [] luego de la variable sin ningun indice //
-        $contacts[] = $contact;
-
-        // Con esta funcion json_enconde transformaremos nuestro parametro en este caso un array // 
-        // o un diccionario en un string con formato de json y file put contents lo guardara en un archivo //
-        file_put_contents("contacts.json", json_encode($contacts));
+        $statement = $conn->prepare("INSERT INTO contacts (name, phone_number) VALUES ('$name', '$phoneNumber')");
+        $statement->execute();
 
         // De esta forma una vez agregado el contacto cambiaremos la cabecera del archivo php //
         // para que nos redireccione nuevamente a index.php //
@@ -56,7 +42,7 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg bg-secondary-subtle">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="index.php">
             <img class="mr-2" src="Media/Static/Img/nadaWebLogo1.png">
             Contacts App
         </a>
@@ -71,22 +57,6 @@
             <li class="nav-item">
             <a class="nav-link" href="add.php">Add contact</a>
             </li>
-            <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
-            </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-            </li>
-        </ul>
-        <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
         </div>
     </div>
     </nav>

@@ -1,15 +1,6 @@
 <?php
-
-
-// Si hay un archivo con el nombre "contacts.json" decodificamelo y //
-// traemelo como un array asociativo //
-if (file_exists("contacts.json")) {
-    $contacts = json_decode(file_get_contents("contacts.json"), true);
-}
-// Si no lo hay deja el array vacio //
-else{
-    $contacts = [];
-}
+require "db.php";
+$contacts = $conn->query("SELECT * FROM contacts");
 
 
 ?>
@@ -41,7 +32,7 @@ else{
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg bg-secondary-subtle">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="index.php">
                 <img class="mr-2" src="Media/Static/Img/nadaWebLogo1.png">
                 Contacts App
             </a>
@@ -56,22 +47,7 @@ else{
                 <li class="nav-item">
                 <a class="nav-link" href="add.php">Add contact</a>
                 </li>
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-                </li>
             </ul>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
             </div>
         </div>
     </nav>
@@ -81,7 +57,7 @@ else{
             <div class="row" >
 
                 <!-- Contacts -->
-                <?php if (count($contacts) == 0): ?>
+                <?php if ($contacts->rowCOUNT() == 0): ?>
                 <div class="col-md-4 mx-auto">
                     <div class="card card-body text-center">
                         <p>No contacts saved</p>
